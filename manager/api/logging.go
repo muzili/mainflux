@@ -45,18 +45,18 @@ func (ls *loggingService) Login(user manager.User) (token string, err error) {
 	return ls.Service.Login(user)
 }
 
-func (ls *loggingService) AddClient(key string, client manager.Client) (id string, err error) {
+func (ls *loggingService) AddClient(key string, uuid string, client manager.Client) (id string, err error) {
 	defer func(begin time.Time) {
 		ls.logger.Log(
 			"method", "add_client",
 			"key", key,
-			"id", id,
+			"id", uuid,
 			"error", err,
 			"took", time.Since(begin),
 		)
 	}(time.Now())
 
-	return ls.Service.AddClient(key, client)
+	return ls.Service.AddClient(key, uuid, client)
 }
 
 func (ls *loggingService) UpdateClient(key string, client manager.Client) (err error) {

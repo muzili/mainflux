@@ -20,6 +20,19 @@ func registrationEndpoint(svc manager.Service) endpoint.Endpoint {
 	}
 }
 
+func deleteEndpoint(svc manager.Service) endpoint.Endpoint {
+	return func(_ context.Context, request interface{}) (interface{}, error) {
+		req := request.(userReq)
+
+		if err := req.validate(); err != nil {
+			return nil, err
+		}
+
+		err := svc.Delete(req.user)
+		return tokenRes{}, err
+	}
+}
+
 func loginEndpoint(svc manager.Service) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		req := request.(userReq)
@@ -45,7 +58,7 @@ func addClientEndpoint(svc manager.Service) endpoint.Endpoint {
 			return nil, err
 		}
 
-		id, err := svc.AddClient(req.key, req.client)
+		id, err := svc.AddClient(req.key, req.id, req.client)
 		if err != nil {
 			return nil, err
 		}

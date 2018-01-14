@@ -34,6 +34,13 @@ func MakeHandler(svc manager.Service) http.Handler {
 		opts...,
 	))
 
+	r.Post("/delete", kithttp.NewServer(
+		deleteEndpoint(svc),
+		decodeCredentials,
+		encodeResponse,
+		opts...,
+	))
+
 	r.Post("/clients", kithttp.NewServer(
 		addClientEndpoint(svc),
 		decodeClientCreation,
@@ -149,6 +156,7 @@ func decodeClientCreation(_ context.Context, r *http.Request) (interface{}, erro
 
 	req := addClientReq{
 		key:    r.Header.Get("Authorization"),
+		id:     r.Header.Get("Id"),
 		client: client,
 	}
 

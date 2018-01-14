@@ -31,8 +31,11 @@ type Service interface {
 	// identified by the non-nil error values in the response.
 	Login(User) (string, error)
 
+	// Delete user
+	Delete(User) error
+
 	// AddClient adds new client to the user identified by the provided key.
-	AddClient(string, Client) (string, error)
+	AddClient(string, string, Client) (string, error)
 
 	// UpdateClient updates the client identified by the provided ID, that
 	// belongs to the user identified by the provided key.

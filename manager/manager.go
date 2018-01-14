@@ -45,7 +45,15 @@ func (ms *managerService) Login(user User) (string, error) {
 	return ms.idp.TemporaryKey(user.Email)
 }
 
-func (ms *managerService) AddClient(key string, client Client) (string, error) {
+func (ms *managerService) Delete(user User) error {
+	_, err := ms.users.One(user.Email)
+	if err != nil {
+		return ErrNotFound
+	}
+	return ms.users.Delete(user.Email)
+}
+
+func (ms *managerService) AddClient(key string, id string, client Client) (string, error) {
 	sub, err := ms.idp.Identity(key)
 	if err != nil {
 		return "", err
@@ -55,7 +63,11 @@ func (ms *managerService) AddClient(key string, client Client) (string, error) {
 		return "", ErrUnauthorizedAccess
 	}
 
-	client.ID = ms.clients.Id()
+	if id == "" {
+		client.ID = ms.clients.Id()
+	} else {
+		client.ID = id
+	}
 	client.Owner = sub
 	client.Key, _ = ms.idp.PermanentKey(client.ID)
 

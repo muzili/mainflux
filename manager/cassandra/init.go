@@ -10,7 +10,7 @@ var tables []string = []string{
 	)`,
 	`CREATE TABLE IF NOT EXISTS clients_by_user (
 		user text,
-		id timeuuid,
+		id uuid,
 		type text,
 		name text,
 		access_key text,
@@ -19,7 +19,7 @@ var tables []string = []string{
 	)`,
 	`CREATE TABLE IF NOT EXISTS channels_by_user (
 		user text,
-		id timeuuid,
+		id uuid,
 		name text,
 		connected set<text>,
 		PRIMARY KEY ((user), id)

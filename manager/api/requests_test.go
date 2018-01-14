@@ -45,21 +45,25 @@ func TestIdentityReqValidation(t *testing.T) {
 
 func TestAddClientReqValidation(t *testing.T) {
 	key := "key"
+	id := "1f5d7e25-be78-46e7-835b-9b8bc5a51695"
 	vc := manager.Client{Type: "app"}
 
 	cases := []struct {
 		key    string
+		id     string
 		client manager.Client
 		err    error
 	}{
-		{key, vc, nil},
-		{"", vc, manager.ErrUnauthorizedAccess},
-		{key, manager.Client{Type: "invalid"}, manager.ErrMalformedEntity},
+		{key, id, vc, nil},
+		{"", id, vc, manager.ErrUnauthorizedAccess},
+		{key, "", vc, nil},
+		{key, id, manager.Client{Type: "invalid"}, manager.ErrMalformedEntity},
 	}
 
 	for i, tc := range cases {
 		req := addClientReq{
 			key:    tc.key,
+			id:     tc.id,
 			client: tc.client,
 		}
 

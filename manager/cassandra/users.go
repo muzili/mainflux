@@ -39,3 +39,12 @@ func (repo *userRepository) One(email string) (manager.User, error) {
 
 	return user, nil
 }
+
+func (repo *userRepository) Delete(email string) error {
+	cql := `DELETE FROM users WHERE email = ? LIMIT 1`
+
+	if err := repo.session.Query(cql, email).Exec(); err != nil {
+		return manager.ErrNotFound
+	}
+	return nil
+}

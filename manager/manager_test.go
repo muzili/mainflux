@@ -33,6 +33,21 @@ func TestRegister(t *testing.T) {
 	}
 }
 
+func TestDelete(t *testing.T) {
+	cases := []struct {
+		user manager.User
+		err  error
+	}{
+		{manager.User{"foo@bar.com", "pass"}, nil},
+		{manager.User{"new@bar.com", "pass"}, manager.ErrNotFound},
+	}
+
+	for i, tc := range cases {
+		e := svc.Delete(tc.user)
+		assert.Equal(t, tc.err, e, fmt.Sprintf("failed %d\n", i))
+	}
+}
+
 func TestLogin(t *testing.T) {
 	cases := []struct {
 		user manager.User

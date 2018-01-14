@@ -34,6 +34,15 @@ func (ms *metricService) Register(user manager.User) error {
 	return ms.Service.Register(user)
 }
 
+func (ms *metricService) Delete(user manager.User) error {
+	defer func(begin time.Time) {
+		ms.counter.With("method", "delete").Add(1)
+		ms.latency.With("method", "delete").Observe(time.Since(begin).Seconds())
+	}(time.Now())
+
+	return ms.Service.Delete(user)
+}
+
 func (ms *metricService) Login(user manager.User) (string, error) {
 	defer func(begin time.Time) {
 		ms.counter.With("method", "login").Add(1)
@@ -43,13 +52,13 @@ func (ms *metricService) Login(user manager.User) (string, error) {
 	return ms.Service.Login(user)
 }
 
-func (ms *metricService) AddClient(key string, client manager.Client) (string, error) {
+func (ms *metricService) AddClient(key string, id string, client manager.Client) (string, error) {
 	defer func(begin time.Time) {
 		ms.counter.With("method", "add_client").Add(1)
 		ms.latency.With("method", "add_client").Observe(time.Since(begin).Seconds())
 	}(time.Now())
 
-	return ms.Service.AddClient(key, client)
+	return ms.Service.AddClient(key, id, client)
 }
 
 func (ms *metricService) UpdateClient(key string, client manager.Client) error {

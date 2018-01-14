@@ -30,4 +30,7 @@ type UserRepository interface {
 
 	// One retrieves user by its unique identifier (i.e. email).
 	One(string) (User, error)
+
+	// Delete the user from its unique identifier
+	Delete(string) error
 }

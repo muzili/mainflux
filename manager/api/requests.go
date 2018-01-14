@@ -31,6 +31,7 @@ func (req identityReq) validate() error {
 
 type addClientReq struct {
 	key    string
+	id     string
 	client manager.Client
 }
 
